@@ -12,9 +12,7 @@ namespace Magazine.Models
         public string Name { get; set; }
         public string Surname { get; set; }
 
-        public int OrderId { get; set; }
-        public Order Order { get; set; }
-
+        public List<Order> Orders { get; set; }
         public List<Promo> Promos { get; set; }
     }
 }

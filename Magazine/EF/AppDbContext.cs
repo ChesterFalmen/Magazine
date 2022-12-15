@@ -45,15 +45,15 @@ namespace Magazine.EF
             Article article1 = new Article { Id = 1, Name = "Iphone 13 128 Gb Space Gray", CategoryId = 1, Price = 45000, ProducerId = 1 };
             Article article2 = new Article { Id = 2, Name = "Iphone 14 256 Gb Purple", CategoryId = 1, Price = 56000, ProducerId = 1 };
 
-            ArticleInOrder articleInOrder1 = new ArticleInOrder { Id = 1, ArticleId = 1, Price = 45000};
+            ArticleInOrder articleInOrder1 = new ArticleInOrder { Id = 1, ArticleId = 1, Price = 45000, OrderId = 1};
 
             Category category1 = new Category { Id = 1, Name = "Phones", Count = 2 };
 
-            Customer customer1 = new Customer { Id = 1, Name = "Vasyl", Surname = "Yurchenko" };
-            Customer customer2 = new Customer { Id = 2, Name = "Taras", Surname = "Andryshchak" };
+            Customer customer1 = new Customer { Id = 1, Name = "Vasyl", Surname = "Yurchenko"};
+            Customer customer2 = new Customer { Id = 2, Name = "Taras", Surname = "Andryshchak"};
 
-            Order order1 = new Order { Id = 1, Count = 1, CustomerId = 1, Sum = 45000 };
-            Order order2 = new Order { Id = 2, Count = 1, CustomerId = 2, Sum = 56000 };
+            Order order1 = new Order { Id = 1, Count = 1, CustomerId = 1, Sum = 45000 , UsingPromoId = 0};
+            Order order2 = new Order { Id = 2, Count = 1, CustomerId = 2, Sum = 56000 , UsingPromoId = 0};
 
             Producer producer1 = new Producer { Id = 1, Name = "Apple" };
 
@@ -61,7 +61,7 @@ namespace Magazine.EF
             Promo promo2 = new Promo { Id = 1, UsingPromoId = 2, Name = "B-day", Sum = 15, CustomerId = 2 };
 
             UsingPromo usingPromo1 = new UsingPromo { Id = 1, PromoId = 1, OrderId = 1};
-            UsingPromo usingPromo2 = new UsingPromo { Id = 2, PromoId = 2, OrderId = 2 };
+            UsingPromo usingPromo2 = new UsingPromo { Id = 2, PromoId = 2, OrderId = 2};
 
             modelBuilder.Entity<Article>().HasData(article1, article2);
             modelBuilder.Entity<ArticleInOrder>().HasData(articleInOrder1);
@@ -140,13 +140,13 @@ namespace Magazine.EF
                 .Entity<Promo>()
                 .HasOne(x => x.Customer)
                 .WithMany(x => x.Promos)
-                .HasForeignKey("Id")
+                .HasForeignKey("CustomerId")
                 .IsRequired();
 
             modelBuilder
-                .Entity<Customer>()
-                .HasOne(x => x.Order)
-                .WithMany(x => x.Customers)
+                .Entity<Order>()
+                .HasOne(x => x.Customer)
+                .WithMany(x => x.Orders)
                 .HasForeignKey("CustomerId")
                 .IsRequired();
 
