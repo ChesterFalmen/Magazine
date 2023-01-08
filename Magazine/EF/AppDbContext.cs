@@ -1,14 +1,7 @@
 ﻿using Magazine.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 
 namespace Magazine.EF
@@ -18,25 +11,17 @@ namespace Magazine.EF
         public DbSet<Article> Articles { get; set; }
         public DbSet<ArticleInOrder> Article_In_Orders { get; set; }
         public DbSet<Category> Categories { get; set; }
-        public DbSet<Customer> Customers { get; set; }
+        public DbSet<Person> Persons { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<Producer> Producers { get; set; }
-        public DbSet<Promo> Promos { get; set; }
-        public DbSet<UsingPromo> Using_Promos { get; set; }
-
-        public AppDbContext()
-        {
-            //Database.EnsureDeleted();
-            //Database.EnsureCreated();
-        }
-
+        
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             var builder = new ConfigurationBuilder();
             builder.SetBasePath(Directory.GetCurrentDirectory());
             builder.AddJsonFile("appsettings.json");
             var config = builder.Build();
-            string connectionString = config.GetConnectionString("DefaultConnection");
+            var connectionString = config.GetConnectionString("DefaultConnection");
 
             optionsBuilder.UseSqlServer(connectionString);
         }
@@ -49,8 +34,8 @@ namespace Magazine.EF
 
             Category category1 = new Category { Id = 1, Name = "Phones", Count = 2 };
 
-            Customer customer1 = new Customer { Id = 1, Name = "Vasyl", Surname = "Yurchenko" };
-            Customer customer2 = new Customer { Id = 2, Name = "Taras", Surname = "Andryshchak" };
+            Customer customer1 = new Customer { Id = 1, FirstName = "Vasyl", LastName = "Yurchenko" };
+            Customer customer2 = new Customer { Id = 2, FirstName = "Taras", LastName = "Andryshchak" };
 
             Order order1 = new Order { Id = 1, CustomerId = 1, UsingPromoId = 1, Count = 1, Sum = 45000 };
             Order order2 = new Order { Id = 2, CustomerId = 2, UsingPromoId = 2, Count = 1, Sum = 56000 };
@@ -83,6 +68,20 @@ namespace Magazine.EF
                 .WithOne(x => x.Promo)
                 .HasForeignKey<UsingPromo>(t => t.PromoId);
 
+            // TPH - Table per Hierarchy
+            // Маємо Одну спільну таблицю, в якій зберігаються дані з усіх нащадків
+            // Колонка Discriminator визначає тип нащадка
+            modelBuilder.Entity<Person>()
+                .ToTable("Persons")
+                .HasDiscriminator<PersonType>("PersonType")
+                .HasValue<Customer>(PersonType.Customer);
+            
+
+            // TPC - Table per Concrete Type
+            // Для кожного окремого типу, буде створена окрема таблиця
+            modelBuilder.Entity<Person>().ToTable("Persons");
+            modelBuilder.Entity<Customer>().ToTable("Customers");
+            
             modelBuilder
                 .Entity<Order>()
                 .HasOne(x => x.UsingPromo)
@@ -104,7 +103,7 @@ namespace Magazine.EF
 
             modelBuilder
                .Entity<Customer>()
-               .Property(x => x.Name)
+               .Property(x => x.FirstName)
                .HasColumnName("Name")
                .HasMaxLength(255);
 

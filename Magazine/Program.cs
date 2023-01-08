@@ -2,12 +2,8 @@
 using Magazine.EF;
 using Magazine.Models;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Reflection.Metadata;
 using System.Threading;
-using System.Threading.Tasks;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace Magazine
 {
@@ -41,7 +37,7 @@ namespace Magazine
         {
             AppDbContext context = new AppDbContext();
 
-            var query = from customer in context.Customers
+            var query = from customer in context.Persons
                         join order in context.Orders
                         on customer.Id equals order.CustomerId
                         join articleInOrder in context.Article_In_Orders
@@ -65,7 +61,7 @@ namespace Magazine
             foreach (var item in query)
             {
                 Console.WriteLine("----------------------------------------------------------");
-                Console.WriteLine($"Customer: {item.Customer.Name} {item.Customer.Surname}");
+                Console.WriteLine($"Customer: {item.Customer.FirstName} {item.Customer.Surname}");
                 Console.WriteLine($"Order: [{item.Order.Id}] {item.Order.Sum}$");
                 Console.WriteLine($"Article: {item.Article.Name} - {item.Article.Price}$");
                 Console.WriteLine($"Article in order: [{item.ArticleInOrder.Id}] {item.ArticleInOrder.Price}$");
@@ -89,7 +85,7 @@ namespace Magazine
             Article article = new Article { Name = "Iphone 13 128 Gb Space Gray", Price = 45000 };
             ArticleInOrder articleInOrder = new ArticleInOrder { Price = 45000 };
             Category category = new Category { Name = "Phone", Count = 1 };
-            Customer customer = new Customer { Name = "Petro", Surname = "Vasylenko" };
+            Customer customer = new Customer { FirstName = "Petro", Surname = "Vasylenko" };
             Order order = new Order { Count = 1, Sum = 55000 };
             Producer producer = new Producer { Name = "Apples" };
             Promo promo = new Promo { Name = "HB", Sum = 1000 };
@@ -130,7 +126,5 @@ namespace Magazine
 
             context.SaveChanges();
         }
-
-
     }
 }
