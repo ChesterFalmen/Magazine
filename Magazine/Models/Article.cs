@@ -18,6 +18,6 @@ namespace Magazine.Models
         public int CategoryId { get; set; }
         public Category Category { get; set; }
 
-        public List<ArticleInOrder> ArticleInOrders { get; set; } 
+        public virtual List<ArticleInOrder> ArticleInOrders { get; set; } 
     }
 }

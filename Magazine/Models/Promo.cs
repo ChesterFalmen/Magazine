@@ -11,10 +11,10 @@ namespace Magazine.Models
         public int Id { get; set; }
 
         public int? UsingPromoId { get; set; }
-        public UsingPromo UsingPromo { get; set; }
+        public virtual UsingPromo UsingPromo { get; set; }
 
         public int? CustomerId { get; set; }    
-        public Customer Customer { get; set; }
+        public virtual Customer Customer { get; set; }
 
         public string Name { get; set; }
         public int Sum { get; set; }

@@ -11,7 +11,7 @@ namespace Magazine.Models
         public int Id { get; set; }
 
         public int? PromoId { get; set; }
-        public Promo Promo { get; set; }
+        public virtual Promo Promo { get; set; }
 
         public int? OrderId { get; set; }
         public Order Order{ get; set; } 
