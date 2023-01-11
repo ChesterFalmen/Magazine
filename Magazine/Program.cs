@@ -9,6 +9,7 @@ namespace Magazine
 {
     internal class Program
     {
+        ///union, except, intersect, join, distinct, group by, агрегатних функцій.
         static AutoResetEvent waitHandler = new AutoResetEvent(true);
 
         static void Main(string[] args)
