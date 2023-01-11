@@ -10,5 +10,9 @@ namespace Magazine.Models
     {
         public virtual List<Order> Orders { get; set; }
         public virtual List<Promo> Promos { get; set; }
+        public string Surname { get; set; }
+
+        public List<Order> Orders { get; set; }
+        public List<Promo> Promos { get; set; }
     }
 }
