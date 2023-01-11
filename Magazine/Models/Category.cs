@@ -12,6 +12,6 @@ namespace Magazine.Models
         public string Name { get; set; }
         public int Count { get; set; }
 
-        public List<Article> Articles { get; set; }
+        public virtual List<Article> Articles { get; set; }
     }
 }
